@@ -1,0 +1,49 @@
+<div class="card">
+
+  <div class="card-image-wrap">
+    <img
+      [src]="character.image.original || character.image.medium"
+      [alt]="character.name">
+    <span class="card-status" [class.running]="character.status === 'Running'">
+      {{ character.status }}
+    </span>
+  </div>
+
+  <div class="card-body">
+    <h2>{{ character.name }}</h2>
+
+    <div class="card-meta">
+      <div class="meta-row">
+        <span class="meta-icon">🎬</span>
+        <span><strong>Tipo:</strong> {{ character.type }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-icon">🌐</span>
+        <span><strong>Idioma:</strong> {{ character.language }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-icon">📡</span>
+        <span><strong>Estado:</strong> {{ character.status }}</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-icon">⏱</span>
+        <span><strong>Duración:</strong> {{ character.runtime }} min</span>
+      </div>
+      <div class="meta-row">
+        <span class="meta-icon">📅</span>
+        <span><strong>Estreno:</strong> {{ character.premiered }}</span>
+      </div>
+    </div>
+
+    <div class="genres-row">
+      <span class="genre-pill" *ngFor="let genre of character.genres">{{ genre }}</span>
+    </div>
+
+    <a class="card-link" [href]="character.officialSite" target="_blank">
+      Sitio oficial
+
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+    </a>
+  </div>
+
+</div>

@@ -1,0 +1,271 @@
+.episodes-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ── Toolbar ── */
+.episodes-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: rgba(255,253,240,0.04);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  background: rgba(255,253,240,0.06);
+  border: 1px solid rgba(255,253,240,0.12);
+  border-radius: 12px;
+  padding: .55rem 1rem;
+  transition: border-color .2s;
+}
+.search-box:focus-within {
+  border-color: rgba(255,213,0,0.5);
+  box-shadow: 0 0 0 3px rgba(255,213,0,0.08);
+}
+.search-icon { font-size: 1rem; opacity: .6; }
+
+.search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--white);
+  font-family: 'Nunito', sans-serif;
+  font-size: .92rem;
+  font-weight: 600;
+}
+.search-input::placeholder { color: rgba(255,253,240,.35); }
+
+.clear-btn {
+  background: none;
+  border: none;
+  color: rgba(255,253,240,.5);
+  cursor: pointer;
+  font-size: .85rem;
+  padding: .1rem .3rem;
+  border-radius: 4px;
+  transition: color .2s;
+}
+.clear-btn:hover { color: var(--accent); }
+
+/* ── Season pills ── */
+.season-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+.season-pill {
+  padding: .3rem .85rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: rgba(255,253,240,.65);
+  font-family: 'Nunito', sans-serif;
+  font-size: .75rem;
+  font-weight: 800;
+  cursor: pointer;
+  letter-spacing: .06em;
+  transition: all .18s;
+}
+.season-pill:hover {
+  border-color: var(--yellow);
+  color: var(--yellow);
+}
+.season-pill.active {
+  background: var(--yellow);
+  border-color: var(--yellow);
+  color: var(--dark);
+}
+
+/* ── Results summary ── */
+.results-summary {
+  font-size: .82rem;
+  color: rgba(255,253,240,.5);
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+.results-summary strong { color: var(--yellow); }
+
+/* ── Empty state ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .8rem;
+  padding: 3.5rem 1rem;
+  color: rgba(255,253,240,.4);
+  font-size: .9rem;
+  font-weight: 600;
+  text-align: center;
+}
+.empty-icon { font-size: 2.5rem; }
+.empty-state strong { color: var(--yellow); }
+
+.clear-btn-lg {
+  margin-top: .4rem;
+  padding: .5rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--yellow);
+  background: transparent;
+  color: var(--yellow);
+  font-family: 'Nunito', sans-serif;
+  font-size: .82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .2s;
+}
+.clear-btn-lg:hover {
+  background: var(--yellow);
+  color: var(--dark);
+}
+
+/* ── Season block ── */
+.season-block { display: flex; flex-direction: column; gap: 1rem; }
+
+.season-header {
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  padding-bottom: .5rem;
+  border-bottom: 2px solid rgba(255,213,0,0.2);
+}
+.season-label {
+  font-family: 'Bangers', cursive;
+  font-size: 1.4rem;
+  color: var(--yellow);
+  letter-spacing: .08em;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+}
+.season-count {
+  font-size: .72rem;
+  font-weight: 800;
+  color: rgba(255,253,240,.4);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+/* ── Episodes grid ── */
+.episodes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+/* ── Episode card ── */
+.episode-card {
+  display: flex;
+  gap: .85rem;
+  background: rgba(255,253,240,0.04);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: .85rem;
+  cursor: pointer;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+  align-items: flex-start;
+}
+.episode-card:hover {
+  background: rgba(255,253,240,0.07);
+  border-color: rgba(255,213,0,0.3);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.episode-card.expanded {
+  border-color: rgba(255,213,0,0.55);
+  background: rgba(255,213,0,0.05);
+  box-shadow: 0 0 0 2px rgba(255,213,0,0.12), 0 8px 30px rgba(0,0,0,0.35);
+}
+
+/* ── Thumbnail ── */
+.ep-thumb {
+  flex-shrink: 0;
+  width: 72px;
+  height: 54px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255,253,240,0.06);
+}
+.ep-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ep-thumb--placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  opacity: .4;
+}
+
+/* ── Episode info ── */
+.ep-info {
+  display: flex;
+  flex-direction: column;
+  gap: .3rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.ep-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.ep-code {
+  font-size: .68rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  background: rgba(255,213,0,0.15);
+  border: 1px solid rgba(255,213,0,0.3);
+  color: var(--yellow);
+  padding: .1rem .5rem;
+  border-radius: 999px;
+}
+.ep-date, .ep-runtime {
+  font-size: .7rem;
+  color: rgba(255,253,240,.4);
+  font-weight: 700;
+}
+
+.ep-name {
+  font-size: .9rem;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.episode-card.expanded .ep-name { white-space: normal; }
+
+.ep-summary {
+  margin-top: .3rem;
+  font-size: .8rem;
+  color: rgba(255,253,240,.7);
+  line-height: 1.55;
+  font-weight: 600;
+}
+
+.ep-toggle-hint {
+  font-size: .68rem;
+  font-weight: 800;
+  color: rgba(255,213,0,.55);
+  letter-spacing: .06em;
+  margin-top: .2rem;
+}
+
+@media (max-width: 500px) {
+  .episodes-grid { grid-template-columns: 1fr; }
+  .ep-name { white-space: normal; }
+}
