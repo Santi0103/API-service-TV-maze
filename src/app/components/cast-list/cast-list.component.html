@@ -1,0 +1,211 @@
+<div class="cast-wrapper">
+
+  <!-- Sub-tabs -->
+  <div class="sub-tabs">
+    <button class="sub-tab" [class.active]="subTab==='characters'" (click)="setSubTab('characters')">🎭 Personajes</button>
+    <button class="sub-tab" [class.active]="subTab==='actors'" (click)="setSubTab('actors')">🎙 Actores</button>
+    <button class="sub-tab" [class.active]="subTab==='crew'" (click)="setSubTab('crew')">✍️ Creadores</button>
+  </div>
+
+  <!-- Buscador -->
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input type="text"
+      [placeholder]="subTab==='characters' ? 'Buscar personaje…' : subTab==='actors' ? 'Buscar actor…' : 'Buscar en el equipo…'"
+      [(ngModel)]="searchQuery" class="search-input" />
+    <button class="clear-btn" *ngIf="searchQuery" (click)="searchQuery=''">✕</button>
+  </div>
+
+  <!-- ══ PERSONAJES ══ -->
+  <div *ngIf="subTab==='characters'">
+    <p class="results-summary">{{ filteredChars.length }} personaje{{ filteredChars.length!==1?'s':'' }}</p>
+
+    <div class="chars-grid">
+      <div *ngFor="let c of filteredChars" class="char-card"
+           [class.expanded]="expanded===c.character.id"
+           (click)="toggle(c.character.id)">
+
+        <div class="char-img-wrap">
+          <img *ngIf="c.character.image" [src]="c.character.image.original||c.character.image.medium"
+               [alt]="c.character.name" loading="lazy"/>
+          <div *ngIf="!c.character.image" class="img-placeholder">🎭</div>
+          <div class="char-gradient"></div>
+          <div class="char-name-overlay">
+            <h3>{{ c.character.name }}</h3>
+            <p>🎙 {{ c.person.name }}</p>
+          </div>
+        </div>
+
+        <!-- Mini descripción siempre visible si hay datos -->
+        <div class="char-mini-bio" *ngIf="c.person.country || c.voice">
+          <span *ngIf="c.person.country" class="bio-chip">📍 {{ c.person.country.name }}</span>
+          <span *ngIf="c.voice" class="bio-chip">🎤 Actuación de voz</span>
+        </div>
+
+        <div class="char-body" *ngIf="expanded===c.character.id">
+          <!-- Actor info -->
+          <div class="actor-mini">
+            <img *ngIf="c.person.image" [src]="c.person.image.medium" [alt]="c.person.name" class="actor-mini-img"/>
+            <div>
+              <p class="actor-mini-name">{{ c.person.name }}</p>
+              <p class="actor-mini-sub" *ngIf="c.person.birthday">{{ age(c.person.birthday) }}</p>
+            </div>
+          </div>
+
+          <!-- Bio del actor -->
+          <div class="bio-block" *ngIf="c.person.summary">
+            <p class="bio-label">Sobre el actor</p>
+            <p class="bio-text">{{ bioPreview(c.person.summary) }}</p>
+          </div>
+          <div class="bio-block no-bio" *ngIf="!c.person.summary">
+            <p>No hay descripción disponible para este personaje.</p>
+          </div>
+
+          <div class="char-badges">
+            <span class="cbadge" *ngIf="c.voice">🎤 Voz</span>
+            <span class="cbadge" *ngIf="c.self">👤 Él mismo</span>
+            <span class="cbadge" *ngIf="c.person.gender">{{ c.person.gender }}</span>
+            <span class="cbadge" *ngIf="c.person.country">📍 {{ c.person.country!.name }}</span>
+          </div>
+          <a class="char-link" [href]="c.character.url" target="_blank" (click)="$event.stopPropagation()">
+            Perfil del personaje ↗
+          </a>
+        </div>
+
+        <span class="toggle-hint">{{ expanded===c.character.id ? '▲ Cerrar' : '▼ Ver detalles' }}</span>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="filteredChars.length===0">
+      <span>🎭</span><p>No se encontró <strong>"{{ searchQuery }}"</strong></p>
+    </div>
+  </div>
+
+  <!-- ══ ACTORES ══ -->
+  <div *ngIf="subTab==='actors'">
+    <p class="results-summary">{{ filteredActors.length }} actor{{ filteredActors.length!==1?'es':'' }}</p>
+
+    <div class="actors-grid">
+      <div *ngFor="let c of filteredActors" class="actor-card"
+           [class.expanded]="expanded===c.person.id"
+           (click)="toggle(c.person.id)">
+
+        <div class="actor-photo-wrap">
+          <img *ngIf="c.person.image" [src]="c.person.image.original||c.person.image.medium"
+               [alt]="c.person.name" loading="lazy"/>
+          <div *ngIf="!c.person.image" class="img-placeholder">👤</div>
+        </div>
+
+        <div class="actor-info">
+          <h3 class="actor-name">{{ c.person.name }}</h3>
+          <p class="actor-char">da voz a <strong>{{ c.character.name }}</strong></p>
+
+          <!-- Mini bio siempre visible -->
+          <p class="actor-bio-preview" *ngIf="c.person.summary">
+            {{ bioPreview(c.person.summary) }}
+          </p>
+          <p class="actor-bio-preview no-bio-inline" *ngIf="!c.person.summary">
+            Sin descripción disponible.
+          </p>
+
+          <!-- Detalles expandidos -->
+          <div class="actor-details" *ngIf="expanded===c.person.id">
+            <div class="detail-row" *ngIf="c.person.gender">
+              <span class="d-label">Género</span><span>{{ c.person.gender }}</span>
+            </div>
+            <div class="detail-row" *ngIf="c.person.birthday">
+              <span class="d-label">Nacimiento</span><span>{{ c.person.birthday }}</span>
+            </div>
+            <div class="detail-row" *ngIf="c.person.birthday">
+              <span class="d-label">Edad</span><span>{{ age(c.person.birthday) }}</span>
+            </div>
+            <div class="detail-row" *ngIf="c.person.country">
+              <span class="d-label">País</span><span>{{ c.person.country!.name }}</span>
+            </div>
+            <div class="detail-row" *ngIf="c.person.deathday">
+              <span class="d-label">Fallecimiento</span><span>{{ c.person.deathday }}</span>
+            </div>
+            <div class="actor-badges">
+              <span class="cbadge" *ngIf="c.voice">🎤 Doblaje</span>
+              <span class="cbadge" *ngIf="c.self">👤 Él mismo</span>
+            </div>
+            <div class="actor-links">
+              <a class="char-link" [href]="c.person.url" target="_blank" (click)="$event.stopPropagation()">Perfil del actor ↗</a>
+              <a class="char-link sky" [href]="c.character.url" target="_blank" (click)="$event.stopPropagation()">Perfil del personaje ↗</a>
+            </div>
+          </div>
+
+          <span class="toggle-hint">{{ expanded===c.person.id ? '▲ Cerrar' : '▼ Más info' }}</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="filteredActors.length===0">
+      <span>👤</span><p>No se encontró <strong>"{{ searchQuery }}"</strong></p>
+    </div>
+  </div>
+
+  <!-- ══ CREADORES / CREW ══ -->
+  <div *ngIf="subTab==='crew'">
+    <div class="crew-loading" *ngIf="crew.length===0">
+      <div class="spinner"></div><p>Cargando equipo…</p>
+    </div>
+
+    <div *ngIf="crew.length>0">
+      <div *ngFor="let role of crewRoles" class="crew-section">
+        <ng-container *ngIf="crewByRole(role).length > 0">
+          <div class="crew-role-header">
+            <span class="role-icon">{{ roleIcon(role) }}</span>
+            <span class="role-name">{{ role }}</span>
+            <span class="role-count">{{ crewByRole(role).length }}</span>
+          </div>
+          <div class="crew-cards">
+            <div *ngFor="let m of crewByRole(role)" class="crew-card"
+                 [class.expanded]="expanded===m.person.id"
+                 (click)="toggle(m.person.id)">
+
+              <div class="crew-photo">
+                <img *ngIf="m.person.image" [src]="m.person.image.medium" [alt]="m.person.name" loading="lazy"/>
+                <div *ngIf="!m.person.image" class="img-placeholder small">{{ roleIcon(role) }}</div>
+              </div>
+
+              <div class="crew-info">
+                <p class="crew-name">{{ m.person.name }}</p>
+                <div class="crew-meta-row">
+                  <span *ngIf="m.person.birthday" class="crew-sub">{{ age(m.person.birthday) }}</span>
+                  <span *ngIf="m.person.country" class="crew-sub">📍 {{ m.person.country!.name }}</span>
+                  <span *ngIf="m.person.gender" class="crew-sub">{{ m.person.gender }}</span>
+                </div>
+
+                <!-- Mini descripción del creador -->
+                <p class="crew-bio" *ngIf="m.person.summary">
+                  {{ bioPreview(m.person.summary) }}
+                </p>
+                <p class="crew-bio no-bio-inline" *ngIf="!m.person.summary">
+                  Sin descripción disponible.
+                </p>
+
+                <!-- Datos extra expandidos -->
+                <div class="crew-expanded" *ngIf="expanded===m.person.id">
+                  <div class="detail-row" *ngIf="m.person.birthday">
+                    <span class="d-label">Nacimiento</span><span>{{ m.person.birthday }}</span>
+                  </div>
+                  <div class="detail-row" *ngIf="m.person.deathday">
+                    <span class="d-label">Fallecimiento</span><span>{{ m.person.deathday }}</span>
+                  </div>
+                  <!-- Bio completa -->
+                  <p class="crew-bio full" *ngIf="m.person.summary">{{ stripHtml(m.person.summary) }}</p>
+                </div>
+              </div>
+
+              <a class="crew-link" [href]="m.person.url" target="_blank"
+                 title="Ver perfil" (click)="$event.stopPropagation()">↗</a>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+</div>

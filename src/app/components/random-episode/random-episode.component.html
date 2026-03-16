@@ -1,0 +1,52 @@
+<div class="random-wrapper">
+
+  <div class="random-hero" *ngIf="!current && !spinning">
+    <span class="hero-emoji">🎲</span>
+    <h2 class="hero-title">¿No sabes qué ver?</h2>
+    <p class="hero-sub">Presiona el botón y te recomendamos un episodio al azar entre los {{ episodes.length }} disponibles.</p>
+    <button class="roll-btn" (click)="roll()" [disabled]="!episodes.length">
+      🎲 Sorpréndeme
+    </button>
+  </div>
+
+  <div class="spinning-state" *ngIf="spinning">
+    <div class="dice-spin">🎲</div>
+    <p>Eligiendo episodio…</p>
+  </div>
+
+  <div class="result-card" *ngIf="current && !spinning">
+    <div class="result-image" *ngIf="current.image">
+      <img [src]="current.image.original || current.image.medium" [alt]="current.name" />
+      <div class="result-overlay">
+        <span class="ep-badge">S{{ pad(current.season) }}E{{ pad(current.number) }}</span>
+      </div>
+    </div>
+    <div class="result-image result-image--placeholder" *ngIf="!current.image">
+      <span>📺</span>
+    </div>
+
+    <div class="result-body">
+      <h2 class="result-title">{{ current.name }}</h2>
+      <div class="result-meta">
+        <span class="meta-chip">📅 {{ current.airdate }}</span>
+        <span class="meta-chip" *ngIf="current.runtime">⏱ {{ current.runtime }} min</span>
+        <span class="meta-chip">📡 Temporada {{ current.season }}</span>
+      </div>
+      <p class="result-summary" *ngIf="current.summary">{{ stripHtml(current.summary) }}</p>
+
+      <div class="result-actions">
+        <button class="fav-btn" [class.is-fav]="isFavorite(current.id)" (click)="onFavorite(current)">
+          {{ isFavorite(current.id) ? '💛 En favoritos' : '🤍 Agregar a favoritos' }}
+        </button>
+        <button class="roll-btn small" (click)="roll()">🎲 Otro episodio</button>
+      </div>
+
+      <div class="history-nav" *ngIf="history.length > 1">
+        <button class="nav-btn" (click)="prev()" [disabled]="historyIndex===0">← Anterior</button>
+        <span class="history-pos">{{ historyIndex + 1 }} / {{ history.length }}</span>
+        <button class="nav-btn" (click)="next()" [disabled]="historyIndex===history.length-1">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+
+</div>

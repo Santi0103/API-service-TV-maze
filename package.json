@@ -2,6 +2,7 @@
   "name": "api-sim",
   "version": "0.0.0",
   "scripts": {
+    "deploy": "ng build --base-href=https://Santi0103.github.io/API-service-TV-maze/ && npx angular-cli-ghpages --dir=dist/api-sim/browser",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -27,6 +28,7 @@
     "@angular/cli": "^17.3.17",
     "@angular/compiler-cli": "^17.3.0",
     "@types/jasmine": "~5.1.0",
+    "angular-cli-ghpages": "^2.0.3",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

@@ -1,0 +1,28 @@
+<div class="favs-wrapper">
+
+  <div class="empty-favs" *ngIf="favorites.length === 0">
+    <span class="empty-icon">🤍</span>
+    <h3>Sin favoritos aún</h3>
+    <p>Ve a <strong>Episodios</strong> o <strong>Episodio aleatorio</strong> y presiona el corazón para guardar tus episodios favoritos.</p>
+  </div>
+
+  <div class="favs-grid" *ngIf="favorites.length > 0">
+    <div *ngFor="let ep of favorites" class="fav-card">
+      <div class="fav-thumb">
+        <img *ngIf="ep.image" [src]="ep.image.medium" [alt]="ep.name" loading="lazy"/>
+        <div *ngIf="!ep.image" class="fav-placeholder">📺</div>
+        <span class="fav-badge">S{{ pad(ep.season) }}E{{ pad(ep.number) }}</span>
+      </div>
+      <div class="fav-info">
+        <h3 class="fav-name">{{ ep.name }}</h3>
+        <div class="fav-meta">
+          <span>📅 {{ ep.airdate }}</span>
+          <span *ngIf="ep.runtime">⏱ {{ ep.runtime }} min</span>
+        </div>
+        <p class="fav-summary" *ngIf="ep.summary">{{ stripHtml(ep.summary) | slice:0:120 }}…</p>
+      </div>
+      <button class="remove-btn" (click)="remove.emit(ep.id)" title="Quitar de favoritos">✕</button>
+    </div>
+  </div>
+
+</div>

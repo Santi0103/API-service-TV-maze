@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Episode } from '../../interfaces/characters.interface';
 
 @Component({
@@ -8,14 +8,15 @@ import { Episode } from '../../interfaces/characters.interface';
 })
 export class EpisodesListComponent implements OnChanges {
   @Input() episodes: Episode[] = [];
+  @Input() favorites: Episode[] = [];
+  @Output() toggleFavorite = new EventEmitter<Episode>();
 
   searchQuery: string = '';
   selectedSeason: number | 'all' = 'all';
   expandedEpisode: number | null = null;
 
   get seasons(): number[] {
-    const s = [...new Set(this.episodes.map(e => e.season))];
-    return s.sort((a, b) => a - b);
+    return [...new Set(this.episodes.map(e => e.season))].sort((a, b) => a - b);
   }
 
   get filteredEpisodes(): Episode[] {
@@ -39,13 +40,20 @@ export class EpisodesListComponent implements OnChanges {
       .map(([season, episodes]) => ({ season, episodes }));
   }
 
+  isFav(id: number): boolean {
+    return this.favorites.some(f => f.id === id);
+  }
+
   toggleEpisode(id: number) {
     this.expandedEpisode = this.expandedEpisode === id ? null : id;
   }
 
-  clearSearch() {
-    this.searchQuery = '';
+  onFavClick(event: Event, ep: Episode) {
+    event.stopPropagation();
+    this.toggleFavorite.emit(ep);
   }
+
+  clearSearch() { this.searchQuery = ''; }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['episodes']) {
@@ -56,7 +64,6 @@ export class EpisodesListComponent implements OnChanges {
   }
 
   stripHtml(html: string): string {
-    if (!html) return '';
-    return html.replace(/<[^>]*>/g, '');
+    return html ? html.replace(/<[^>]*>/g, '') : '';
   }
 }

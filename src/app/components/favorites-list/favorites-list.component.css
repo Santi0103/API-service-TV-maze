@@ -1,0 +1,25 @@
+.favs-wrapper { display:flex; flex-direction:column; gap:1rem; }
+
+.empty-favs { display:flex; flex-direction:column; align-items:center; gap:.8rem; padding:4rem 1rem; text-align:center; color:rgba(255,253,240,.45); }
+.empty-icon { font-size:3rem; }
+.empty-favs h3 { font-family:'Bangers',cursive; font-size:1.6rem; color:rgba(255,253,240,.5); letter-spacing:.06em; }
+.empty-favs p { font-size:.88rem; font-weight:600; max-width:340px; line-height:1.5; }
+.empty-favs strong { color:var(--yellow); }
+
+.favs-grid { display:flex; flex-direction:column; gap:.85rem; }
+
+.fav-card { display:flex; gap:1rem; align-items:flex-start; background:rgba(255,253,240,0.04); border:1px solid var(--border); border-radius:14px; padding:.9rem; position:relative; transition:all .2s; }
+.fav-card:hover { border-color:rgba(255,213,0,0.3); background:rgba(255,253,240,0.07); }
+
+.fav-thumb { position:relative; flex-shrink:0; width:90px; height:68px; border-radius:10px; overflow:hidden; background:rgba(255,253,240,0.06); }
+.fav-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.fav-placeholder { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:1.6rem; opacity:.35; }
+.fav-badge { position:absolute; bottom:4px; left:4px; font-size:.58rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; background:rgba(255,213,0,0.9); color:var(--dark); padding:.15rem .45rem; border-radius:999px; }
+
+.fav-info { flex:1; min-width:0; display:flex; flex-direction:column; gap:.3rem; }
+.fav-name { font-size:.95rem; font-weight:900; color:var(--white); line-height:1.3; }
+.fav-meta { display:flex; gap:.7rem; flex-wrap:wrap; font-size:.74rem; color:rgba(255,253,240,.45); font-weight:700; }
+.fav-summary { font-size:.78rem; color:rgba(255,253,240,.6); line-height:1.5; font-weight:600; }
+
+.remove-btn { position:absolute; top:.7rem; right:.7rem; background:none; border:1px solid rgba(255,107,53,0.3); color:rgba(255,107,53,0.7); border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:.75rem; cursor:pointer; transition:all .18s; flex-shrink:0; }
+.remove-btn:hover { background:rgba(255,107,53,0.15); border-color:var(--accent); color:var(--accent); }

@@ -1,0 +1,57 @@
+<div class="stats-wrapper" *ngIf="stats.totalEpisodes; else loading">
+
+  <div class="stats-cards">
+    <div class="stat-card">
+      <span class="stat-icon">📺</span>
+      <span class="stat-value">{{ stats.totalEpisodes }}</span>
+      <span class="stat-label">Episodios totales</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">📅</span>
+      <span class="stat-value">{{ stats.totalSeasons }}</span>
+      <span class="stat-label">Temporadas</span>
+    </div>
+    <div class="stat-card accent">
+      <span class="stat-icon">⏱</span>
+      <span class="stat-value">{{ stats.totalRuntimeHours }}<small>h</small></span>
+      <span class="stat-label">{{ stats.totalRuntimeDays }} días de contenido</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">📊</span>
+      <span class="stat-value">{{ stats.avgEpisodesPerSeason }}</span>
+      <span class="stat-label">Eps. por temporada (prom.)</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">🗓</span>
+      <span class="stat-value">{{ stats.firstYear }}</span>
+      <span class="stat-label">Año de estreno</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-icon">🔥</span>
+      <span class="stat-value">{{ stats.lastYear }}</span>
+      <span class="stat-label">Último año activo</span>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h3 class="chart-title">📈 Episodios por temporada</h3>
+    <div class="bar-chart">
+      <div *ngFor="let s of stats.bySeason" class="bar-row">
+        <span class="bar-label">T{{ s.season }}</span>
+        <div class="bar-track">
+          <div class="bar-fill" [style.width.%]="barWidth(s.count)">
+            <span class="bar-count">{{ s.count }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #loading>
+  <div class="loading-state">
+    <div class="spinner"></div>
+    <p>Calculando estadísticas…</p>
+  </div>
+</ng-template>

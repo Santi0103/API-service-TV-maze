@@ -1,48 +1,34 @@
 <div class="episodes-wrapper">
 
-  <!-- Barra de búsqueda y filtros -->
+  <!-- Toolbar -->
   <div class="episodes-toolbar">
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input
-        type="text"
-        placeholder="Buscar episodio por nombre o descripción…"
-        [(ngModel)]="searchQuery"
-        class="search-input"
-      />
+      <input type="text" placeholder="Buscar episodio por nombre o descripción…"
+        [(ngModel)]="searchQuery" class="search-input" />
       <button class="clear-btn" *ngIf="searchQuery" (click)="clearSearch()">✕</button>
     </div>
-
     <div class="season-filters">
-      <button
-        class="season-pill"
-        [class.active]="selectedSeason === 'all'"
-        (click)="selectedSeason = 'all'">
-        Todas
-      </button>
-      <button
-        *ngFor="let s of seasons"
-        class="season-pill"
-        [class.active]="selectedSeason === s"
-        (click)="selectedSeason = s">
-        T{{ s }}
-      </button>
+      <button class="season-pill" [class.active]="selectedSeason === 'all'" (click)="selectedSeason = 'all'">Todas</button>
+      <button *ngFor="let s of seasons" class="season-pill"
+        [class.active]="selectedSeason === s" (click)="selectedSeason = s">T{{ s }}</button>
     </div>
   </div>
 
-  <!-- Resultados vacíos -->
+  <!-- Vacío -->
   <div class="empty-state" *ngIf="filteredEpisodes.length === 0">
     <span class="empty-icon">📭</span>
     <p>No se encontraron episodios para <strong>"{{ searchQuery }}"</strong></p>
     <button class="clear-btn-lg" (click)="clearSearch()">Limpiar búsqueda</button>
   </div>
 
-  <!-- Resumen de resultados cuando hay búsqueda -->
+  <!-- Resumen búsqueda -->
   <div class="results-summary" *ngIf="searchQuery && filteredEpisodes.length > 0">
-    <span>{{ filteredEpisodes.length }} episodio{{ filteredEpisodes.length !== 1 ? 's' : '' }} encontrado{{ filteredEpisodes.length !== 1 ? 's' : '' }} para <strong>"{{ searchQuery }}"</strong></span>
+    {{ filteredEpisodes.length }} episodio{{ filteredEpisodes.length !== 1 ? 's' : '' }} para
+    <strong>"{{ searchQuery }}"</strong>
   </div>
 
-  <!-- Episodios agrupados por temporada -->
+  <!-- Episodios por temporada -->
   <div class="season-block" *ngFor="let group of episodesBySeason">
     <div class="season-header">
       <span class="season-label">Temporada {{ group.season }}</span>
@@ -50,21 +36,20 @@
     </div>
 
     <div class="episodes-grid">
-      <div
-        *ngFor="let ep of group.episodes"
-        class="episode-card"
+      <div *ngFor="let ep of group.episodes" class="episode-card"
         [class.expanded]="expandedEpisode === ep.id"
+        [class.is-fav]="isFav(ep.id)"
         (click)="toggleEpisode(ep.id)">
 
+        <!-- Thumbnail -->
         <div class="ep-thumb" *ngIf="ep.image; else noThumb">
           <img [src]="ep.image.medium" [alt]="ep.name" loading="lazy" />
         </div>
         <ng-template #noThumb>
-          <div class="ep-thumb ep-thumb--placeholder">
-            <span>📺</span>
-          </div>
+          <div class="ep-thumb ep-thumb--placeholder"><span>📺</span></div>
         </ng-template>
 
+        <!-- Info -->
         <div class="ep-info">
           <div class="ep-meta">
             <span class="ep-code">S{{ ep.season | number:'2.0-0' }}E{{ ep.number | number:'2.0-0' }}</span>
@@ -73,13 +58,24 @@
           </div>
           <h3 class="ep-name">{{ ep.name }}</h3>
 
+          <!-- Descripción expandida -->
           <div class="ep-summary" *ngIf="expandedEpisode === ep.id && ep.summary">
             <p>{{ stripHtml(ep.summary) }}</p>
           </div>
 
-          <span class="ep-toggle-hint">
-            {{ expandedEpisode === ep.id ? '▲ Ocultar' : '▼ Ver descripción' }}
-          </span>
+          <div class="ep-actions">
+            <span class="ep-toggle-hint">
+              {{ expandedEpisode === ep.id ? '▲ Ocultar' : '▼ Ver descripción' }}
+            </span>
+
+            <!-- Botón favorito -->
+            <button class="fav-btn"
+              [class.active]="isFav(ep.id)"
+              (click)="onFavClick($event, ep)"
+              [title]="isFav(ep.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'">
+              {{ isFav(ep.id) ? '💛' : '🤍' }}
+            </button>
+          </div>
         </div>
 
       </div>

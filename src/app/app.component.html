@@ -2,9 +2,7 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <div class="logo">
-        <span class="logo-d">D</span>oh!
-      </div>
+      <div class="logo"><span class="logo-d">D</span>oh!</div>
       <div class="header-center">
         <h1 class="site-title">Los Simpsons</h1>
         <p class="site-subtitle">Información oficial vía TVMaze API</p>
@@ -18,47 +16,94 @@
 
   <main class="site-main">
 
-    <!-- Tabs de navegación -->
     <div class="tabs-bar">
-      <button class="tab-btn" [class.active]="activeTab === 'info'" (click)="setTab('info')">
-        <span>📋</span> Información
+      <button class="tab-btn" [class.active]="activeTab==='info'" (click)="setTab('info')">
+        📋 Info
       </button>
-      <button class="tab-btn" [class.active]="activeTab === 'episodes'" (click)="setTab('episodes')">
-        <span>🎬</span> Episodios
+      <button class="tab-btn" [class.active]="activeTab==='episodes'" (click)="setTab('episodes')">
+        🎬 Episodios
+      </button>
+      <button class="tab-btn" [class.active]="activeTab==='cast'" (click)="setTab('cast')">
+        🎭 Elenco
+      </button>
+      <button class="tab-btn" [class.active]="activeTab==='stats'" (click)="setTab('stats')">
+        📊 Estadísticas
+      </button>
+      <button class="tab-btn" [class.active]="activeTab==='random'" (click)="setTab('random')">
+        🎲 Aleatorio
+      </button>
+      <button class="tab-btn fav-tab" [class.active]="activeTab==='favorites'" (click)="setTab('favorites')">
+        💛 Favoritos
+        <span class="fav-badge-count" *ngIf="favorites.length > 0">{{ favorites.length }}</span>
       </button>
     </div>
 
-    <!-- Tab: Información general -->
-    <div *ngIf="activeTab === 'info'">
+    <!-- Info -->
+    <div *ngIf="activeTab==='info'">
       <div class="controls-bar">
-        <button class="toggle-btn" (click)="toggleSim()">
+        <button class="toggle-btn" (click)="showSim = !showSim">
           <span class="btn-icon">{{ showSim ? '👁' : '👁‍🗨' }}</span>
           {{ showSim ? 'Ocultar información' : 'Mostrar información' }}
         </button>
       </div>
-
-      <app-characters-list
-        *ngIf="showSim"
-        [characterList]="sim">
-      </app-characters-list>
-
-      <div class="loading-state" *ngIf="sim.length === 0 && showSim">
-        <div class="spinner"></div>
-        <p>Cargando datos de la serie…</p>
+      <app-characters-list *ngIf="showSim" [characterList]="sim"></app-characters-list>
+      <div class="loading-state" *ngIf="sim.length===0 && showSim">
+        <div class="spinner"></div><p>Cargando datos…</p>
       </div>
     </div>
 
-    <!-- Tab: Episodios -->
-    <div *ngIf="activeTab === 'episodes'">
+    <!-- Episodios -->
+    <div *ngIf="activeTab==='episodes'">
       <div class="loading-state" *ngIf="loadingEpisodes">
-        <div class="spinner"></div>
-        <p>Cargando episodios…</p>
+        <div class="spinner"></div><p>Cargando episodios…</p>
       </div>
-
       <app-episodes-list
         *ngIf="!loadingEpisodes"
-        [episodes]="episodes">
+        [episodes]="episodes"
+        [favorites]="favorites"
+        (toggleFavorite)="toggleFavorite($event)">
       </app-episodes-list>
+    </div>
+
+    <!-- Elenco -->
+    <div *ngIf="activeTab==='cast'">
+      <div class="loading-state" *ngIf="loadingCast">
+        <div class="spinner"></div><p>Cargando elenco…</p>
+      </div>
+      <app-cast-list
+        *ngIf="!loadingCast"
+        [cast]="cast"
+        [crew]="crew">
+      </app-cast-list>
+    </div>
+
+    <!-- Estadísticas -->
+    <div *ngIf="activeTab==='stats'">
+      <div class="loading-state" *ngIf="loadingEpisodes">
+        <div class="spinner"></div><p>Calculando estadísticas…</p>
+      </div>
+      <app-stats-panel *ngIf="!loadingEpisodes" [episodes]="episodes"></app-stats-panel>
+    </div>
+
+    <!-- Episodio Aleatorio -->
+    <div *ngIf="activeTab==='random'">
+      <div class="loading-state" *ngIf="loadingEpisodes">
+        <div class="spinner"></div><p>Cargando episodios…</p>
+      </div>
+      <app-random-episode
+        *ngIf="!loadingEpisodes"
+        [episodes]="episodes"
+        [onFavorite]="toggleFavorite.bind(this)"
+        [isFavorite]="isFavorite.bind(this)">
+      </app-random-episode>
+    </div>
+
+    <!-- Favoritos -->
+    <div *ngIf="activeTab==='favorites'">
+      <app-favorites-list
+        [favorites]="favorites"
+        (remove)="removeFavorite($event)">
+      </app-favorites-list>
     </div>
 
   </main>
